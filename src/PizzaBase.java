@@ -1,15 +1,9 @@
 public abstract class PizzaBase {
 
-    public boolean hasCheese = true;
-    public boolean hasSauce = true;
-    public boolean hasToppings = true;
     public int sliceCount = 8;
 
-    public void PizzaBase(boolean hasCheese, boolean hasSauce, boolean hasToppings, int sliceCount){
+    public void PizzaBase(int sliceCount){
 
-        this.hasCheese = hasCheese;
-        this.hasSauce = hasSauce;
-        this.hasToppings = hasToppings;
         this.sliceCount = sliceCount;
 
     }
@@ -21,6 +15,12 @@ public abstract class PizzaBase {
     public void finished(){
 
         System.out.println("Your pizza is finished, enjoy!");
+
+    }
+
+    public void slices(){
+
+        System.out.println("This pizza has " + sliceCount + " slices.");
 
     }
 
