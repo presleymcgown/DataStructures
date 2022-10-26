@@ -25,6 +25,6 @@ public class Paper implements Cuttable, Colorable, Rippable{
         System.out.println("You can rip this.");
     }
 
-    
+
 
 }
