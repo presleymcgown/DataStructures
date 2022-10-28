@@ -11,9 +11,9 @@ public class ArrayList<T> implements List<T> {
         this(20);
     }
 
-    public ArrayList(int maxSize){
+    public ArrayList(int initialSize){
         count = 0;
-        list = (T[])(new Object[maxSize]);
+        list = (T[])(new Object[initialSize]);
     }
 
     @Override
@@ -37,6 +37,8 @@ public class ArrayList<T> implements List<T> {
     @Override
     public List prepend(T element) {
 
+        checkForGrowth();
+
         for (int i = count - 1; i >= 0; i--) {
             list[i + 1] = list[i];
         }
@@ -48,23 +50,81 @@ public class ArrayList<T> implements List<T> {
 
     }
 
+
+
     @Override
     public List append(T element) {
-        return null;
+
+        checkForGrowth();
+
+        list[count] = element;
+        count++;
+
+        return this;
+
     }
 
     @Override
     public List insert(int index, T element) {
-        return null;
+
+        checkForGrowth();
+
+        for (int i = count - 1; i >= index; i--) {
+            list[i + 1] = list [i];
+        }
+
+        list[index] = element;
+        count++;
+
+        return this;
+
     }
 
     @Override
     public List remove(int index) {
-        return null;
+
+        for (int i = index; i >= count; i++) {
+
+           list[i] = list[i + 1];
+
+        }
+
+        count--;
+
+        return this;
     }
 
     @Override
     public int indexof(T element) {
-        return 0;
+
+        for (int i = 0; i < count; i++) {
+
+            if(list[i] == element){
+
+                return i;
+
+            }
+
+        }
+
+        return -1;
+    }
+
+    private void checkForGrowth(){
+
+        if(count == list.length){
+
+            T[] temp = (T[])(new Object[count * 2]);
+
+            for (int i = 0; i < list.length; i++) {
+
+                temp[i] = list[i];
+
+            }
+
+            list = temp;
+
+        }
+
     }
 }
