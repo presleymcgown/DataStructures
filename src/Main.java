@@ -2,7 +2,7 @@ import com.prog2.datastructures.ArrayList;
 
 public class Main {
 
-    void printList(ArrayList a){
+    static void printList(ArrayList a){
         // System.out.println("-------------------------------------------------");
         for (int i = 0; i < a.getLength(); i++) {
             System.out.println(a.get(i));
@@ -10,7 +10,7 @@ public class Main {
         System.out.println("-------------------------------------------------");
     }
 
-    void test(){
+    static void test(){
         ArrayList<String> list = new ArrayList<>(30);
 
         list.prepend("Frodo").prepend("Sam").prepend("Merry").prepend("Pippin");

@@ -67,6 +67,10 @@ public class ArrayList<T> implements List<T> {
     @Override
     public List insert(int index, T element) {
 
+        if(index < 0 || index >= count){
+            // throw IndexOutOfBoundsException();
+        }
+
         checkForGrowth();
 
         for (int i = count - 1; i >= index; i--) {
@@ -83,6 +87,10 @@ public class ArrayList<T> implements List<T> {
     @Override
     public List remove(int index) {
 
+        if(index < 0 || index >= count){
+            // throw IndexOutOfBoundsException();
+        }
+
         for (int i = index; i >= count; i++) {
 
            list[i] = list[i + 1];
@@ -95,7 +103,9 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public int indexof(T element) {
+    public int indexOf(T element) {
+
+
 
         for (int i = 0; i < count; i++) {
 

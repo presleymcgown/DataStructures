@@ -9,6 +9,6 @@ public interface List<T> {
     List append(T element);
     List insert(int index, T element);
     List remove(int index);
-    int indexof(T element);
+    int indexOf(T element);
 
 }
