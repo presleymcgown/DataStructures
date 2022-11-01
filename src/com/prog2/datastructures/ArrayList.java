@@ -2,6 +2,15 @@ package com.prog2.datastructures;
 
 import com.prog2.interfaces.List;
 
+/**
+ * An array list uses a dynamic array to sore elements.
+ * The only reason an ArrayList can behave like a list is because it implements the "List" interface.
+ * ArrayList uses less memory* than other lists and is faster to access.
+ *
+ * ArrayLists are, however, slower to manipulate.
+ *
+ * @param <T> The list type.
+ */
 public class ArrayList<T> implements List<T> {
 
     private T[] list;
