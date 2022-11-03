@@ -62,7 +62,7 @@ public class SinglyLinkedList<T> implements List {
     @Override
     public List prepend(Object element) {
 
-        Node n = new Node((T) element); //! does this work???
+        Node n = new Node((T) element);
 
         if(count == 0){
             head = n;
@@ -96,16 +96,74 @@ public class SinglyLinkedList<T> implements List {
 
     @Override
     public List insert(int index, Object element) {
-        return null;
+
+        Node n = new Node((T) element);
+
+        if(count == 0){
+            head = n;
+            tail = n;
+        } else if(index == 0) {
+
+            prepend(element);
+
+        } else if (index == count){
+
+            append(element);
+
+        }else{
+
+            Node ptr = head;
+
+            for (int i = 0; i < index - 1; i++) {
+
+                ptr = ptr.next;
+
+            }
+
+            n.next = ptr.next;
+            ptr.next = n;
+
+        }
+
+        count++;
+
+        return this;
     }
 
     @Override
     public List remove(int index) {
-        return null;
+
+        Node ptr = head;
+
+        for (int i = 0; i < index - 1; i++) {
+
+            ptr = ptr.next;
+
+        }
+
+        ptr.next = ptr.next.next;
+
+        count--;
+
+        return this;
     }
 
     @Override
     public int indexOf(Object element) {
+
+        Node ptr = head;
+
+        for (int i = 0; i < count; i++) {
+
+            if(ptr.data == element){
+                return i;
+            }else{
+                ptr = ptr.next;
+            }
+
+
+        }
+
         return 0;
     }
 

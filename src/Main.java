@@ -1,8 +1,9 @@
 import com.prog2.datastructures.ArrayList;
+import com.prog2.datastructures.SinglyLinkedList;
 
 public class Main {
 
-    static void printList(ArrayList a){
+    static void printList(SinglyLinkedList a){
         // System.out.println("-------------------------------------------------");
         for (int i = 0; i < a.getLength(); i++) {
             System.out.println(a.get(i));
@@ -11,7 +12,7 @@ public class Main {
     }
 
     static void test(){
-        ArrayList<String> list = new ArrayList<>(30);
+        SinglyLinkedList<String> list = new SinglyLinkedList<>();
 
         list.prepend("Frodo").prepend("Sam").prepend("Merry").prepend("Pippin");
 
