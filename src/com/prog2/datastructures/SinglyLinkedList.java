@@ -133,17 +133,38 @@ public class SinglyLinkedList<T> implements List {
     @Override
     public List remove(int index) {
 
-        Node ptr = head;
+        if(index > count){
+            throw new IndexOutOfBoundsException(index);
+        }else if(index == 0){
 
-        for (int i = 0; i < index - 1; i++) {
+            head = head.next;
 
-            ptr = ptr.next;
+            count--;
+
+        }else {
+
+            Node ptr = head;
+
+            for (int i = 0; i < index - 1; i++) {
+
+                ptr = ptr.next;
+
+            }
+
+            if(ptr.next == tail){
+
+                ptr.next = ptr.next.next;
+                tail = ptr.next;
+                count--;
+                return this;
+
+            }
+
+            ptr.next = ptr.next.next;
+
+            count--;
 
         }
-
-        ptr.next = ptr.next.next;
-
-        count--;
 
         return this;
     }
@@ -166,8 +187,6 @@ public class SinglyLinkedList<T> implements List {
 
         return 0;
     }
-
-
 
     private class Node {
 
