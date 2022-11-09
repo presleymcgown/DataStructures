@@ -43,33 +43,149 @@ public class DoublyLinkedList<T> implements List<T>{
     @Override
     public T get(int index) {
 
-        //optimized version, see if it is closer to the beginning or end and loop from there
+        if(index > count){
+            throw new IndexOutOfBoundsException(index);
+        }else{
 
-        return null;
+
+            Node ptr = head;
+
+            for (int i = 0; i < index; i++) {
+
+                ptr = ptr.next;
+
+            }
+
+            return ptr.data;
+
+        }
+
     }
 
     @Override
     public List prepend(T element) {
-        return null;
+
+        Node n = new Node(element);
+
+        if(count == 0){
+            head = n;
+            tail = n;
+        } else {
+            n.next = head;
+            head = n;
+        }
+
+        count++;
+        return this;
     }
 
     @Override
     public List append(T element) {
-        return null;
+       Node n = new Node(element);
+
+        if(count == 0){
+            head = n;
+            tail = n;
+        } else {
+            tail.next = n;
+            n.prev = tail.prev;
+            tail = n;
+        }
+
+        count++;
+
+        return this;
     }
 
     @Override
     public List insert(int index, T element) {
-        return null;
+        Node n = new Node(element);
+
+        if(count == 0){
+            head = n;
+            tail = n;
+        } else if(index == 0) {
+
+            prepend(element);
+
+        } else if (index == count){
+
+            append(element);
+
+        }else{
+
+            Node ptr = head;
+
+            for (int i = 0; i < index - 1; i++) {
+
+                ptr = ptr.next;
+
+            }
+
+            n.next = ptr.next;
+            n.prev = ptr.prev;
+            ptr.next = n;
+
+        }
+
+        count++;
+
+        return this;
     }
 
     @Override
     public List remove(int index) {
-        return null;
+        if(index > count){
+            throw new IndexOutOfBoundsException(index);
+        }else if(index == 0){
+
+            head = head.next;
+
+            count--;
+
+        }else {
+
+            Node ptr = head;
+
+            for (int i = 0; i < index - 1; i++) {
+
+                ptr = ptr.next;
+
+            }
+
+            if(ptr.next == tail){
+
+                ptr.next = ptr.next.next;
+                tail = ptr.next;
+                count--;
+                return this;
+
+            }
+
+            ptr.next = ptr.next.next;
+
+            count--;
+
+        }
+
+        return this;
     }
 
     @Override
     public int indexOf(T element) {
+       Node ptr = head;
+
+        for (int i = 0; i < count; i++) {
+
+            if(ptr.data == element){
+                return i;
+            }else{
+                ptr = ptr.next;
+            }
+
+
+        }
+
         return 0;
     }
 

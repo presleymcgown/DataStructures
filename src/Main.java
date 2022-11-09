@@ -1,9 +1,10 @@
 import com.prog2.datastructures.ArrayList;
+import com.prog2.datastructures.DoublyLinkedList;
 import com.prog2.datastructures.SinglyLinkedList;
 
 public class Main {
 
-    static void printList(SinglyLinkedList a){
+    static void printList(DoublyLinkedList a){
         // System.out.println("-------------------------------------------------");
         for (int i = 0; i < a.getLength(); i++) {
             System.out.println(a.get(i));
@@ -12,7 +13,7 @@ public class Main {
     }
 
     static void test(){
-        SinglyLinkedList<String> list = new SinglyLinkedList<>();
+        DoublyLinkedList<String> list = new DoublyLinkedList<>();
 
         list.prepend("Frodo").prepend("Sam").prepend("Merry").prepend("Pippin");
 
@@ -42,6 +43,11 @@ public class Main {
 
         // expected: 3
         System.out.println(list.indexOf("Sam"));
+
+        System.out.println("-------------------------------------------------");
+
+        // expected: "sam"
+        System.out.println(list.get(3));
 
     }
 
