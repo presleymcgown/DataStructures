@@ -79,11 +79,50 @@ public class Calculator extends GraphicsProgram {
 
                 }
 
+                break;
+
             default:
 
                 display.setLabel(display.getLabel() + ae.getActionCommand());
 
         }
+
+    }
+
+    private int calculate(char op, int a, int b){
+
+        if(op == '*'){
+            return a*b;
+        }
+
+        if(op == '/'){
+            return a/b;
+        }
+
+        if(op == '+'){
+            return a+b;
+        }
+
+        if(op == '-'){
+            return a-b;
+        }
+
+        return 0;
+
+    }
+
+    private boolean precedence(char peek, char ch){
+        if((peek == '*' || peek == '/') && (ch == '+' || ch == '-')){
+            return true;
+        }
+
+        // forces left to right operation
+        if(peek != ch && peek != '('){
+            return true;
+        }
+
+        return false;
+
 
     }
 
@@ -94,7 +133,92 @@ public class Calculator extends GraphicsProgram {
         Stack<Integer> ns = new Stack<>();
         Stack<Character> op = new Stack<>();
 
-        return 0;
+        int i = 0;
+        char ch;
+
+        StringBuffer s;
+
+        if(!input.isEmpty()){
+
+            postMessage("Beginning evaluation...", 100);
+
+            // loop across input string
+                while(i < strlen) {
+                    // store the character found at a given point (i)
+                    ch = input.charAt(i);
+                    // skip over blank spaces (this shouldn't happen)
+                    if(ch == ' '){
+                        i++;
+                        continue;
+                    }
+
+                    postMessage("Searching for symbols...");
+                /*
+                    1) Check for numbers. Question to ask yourself: how do I handle multi-digit numbers?
+                       ch <= '9' && ch >= '0' . A char can be converted to an int using Integer.parseInt(new String(s))
+
+                    2) Check for an opening parenthesis, which would indicate the start of a block
+                       that must be evaluated before all others.
+
+                    3) Check for a closing parenthesis, which indicates the end of a block that must
+                       be evaluated before all others
+
+                    4) Check for any non-paren operator, and determine if it has a higher precedence
+                       that the operator that is currently on top of the op stack. When we find an op
+                       that has precedence ( '*' or '/' vs '+' or '-'), we should calculate the result
+                       of the current operator immediately, and push the result onto the number stack.
+
+                    5) As the primary loop reaches the end of an iteration, don't forget to increment.
+                */
+
+                    if(ch <= '9' || ch >= '0'){
+                        s = new StringBuffer();
+                        s.append(ch);
+                        ns.push(Integer.parseInt(new String(s)));
+                        i++;
+                        // you have found a number
+                        // what if the number had multiple digits though?
+                        // push the complete number onto the number stack. To do so:
+                        // ns.push(Integer.parseInt(new String(s)));
+                    }else if(ch == '('){
+                        //you have found an opening paren
+                        // don't do anything yet, just add it to the op stack
+                        op.push(ch);
+                        i++;
+                    }else if(ch == ')'){
+                        // you have found a closing paren. calculate everything between the closed and opening paren
+                        // remove the opening paren
+                        i++;
+                    }else if(ch == '*' || ch == '/' || ch == '+' || ch == '-'){
+                        //this is where you have found an operator. react accordingly
+                        /*
+                        determine if it has a higher precedence
+                        that the operator that is currently
+                        on top of the op stack. When we find
+                        an op that had precedence ( '*' or '/' vs '+' or '-')
+                        we should calculate the result of the
+                        current operator immediately, and push
+                        the result onto the number stack.
+                         */
+                        i++;
+                    }
+
+
+
+                } //primary loops over
+
+            // it is possible that the op stack will still have contents which must  be evaluated until stacks are empty
+
+            //basically, if there are still numbers on the op stack, keep calculating
+
+            //returned  whatever is left on the number stack
+            return ns.pop();
+
+        }else {
+
+            return 0;
+
+        }
 
     }
 
