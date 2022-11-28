@@ -171,22 +171,37 @@ public class Calculator extends GraphicsProgram {
                     5) As the primary loop reaches the end of an iteration, don't forget to increment.
                 */
 
-                    if(ch <= '9' || ch >= '0'){
+                    if(ch <= '9' && ch >= '0'){
+
+                        postMessage("Found number.");
                         s = new StringBuffer();
                         s.append(ch);
-                        ns.push(Integer.parseInt(new String(s)));
                         i++;
+
+                        while(i < strlen && (input.charAt(i)) <= '9' && input.charAt(i) >= '0'){
+
+                            s.append(input.charAt(i));
+                            i++;
+
+                        }
+
+                        ns.push(Integer.parseInt(new String(s)));
+                        continue;
+
                         // you have found a number
                         // what if the number had multiple digits though?
                         // push the complete number onto the number stack. To do so:
                         // ns.push(Integer.parseInt(new String(s)));
+
                     }else if(ch == '('){
                         //you have found an opening paren
                         // don't do anything yet, just add it to the op stack
+                        postMessage("Found opening parenthesis.");
                         op.push(ch);
                         i++;
                     }else if(ch == ')'){
-                        // you have found a closing paren. calculate everything between the closed and opening paren
+                        // you have found a closing paren.
+                        // go ahead and calculate everything on the op stack until you find the opening paren
                         // remove the opening paren
                         i++;
                     }else if(ch == '*' || ch == '/' || ch == '+' || ch == '-'){
@@ -200,14 +215,23 @@ public class Calculator extends GraphicsProgram {
                         current operator immediately, and push
                         the result onto the number stack.
                          */
-                        i++;
+
+                        if(!op.isEmpty() && precedence(op.peak(), ch)){
+
+                            ns.push(calculate(ch, ns.pop(), input.charAt(++i)));
+                            i++;
+
+                        }else{
+                            op.push(ch);
+                            i++;
+                        }
                     }
-
-
 
                 } //primary loops over
 
             // it is possible that the op stack will still have contents which must  be evaluated until stacks are empty
+
+
 
             //basically, if there are still numbers on the op stack, keep calculating
 
