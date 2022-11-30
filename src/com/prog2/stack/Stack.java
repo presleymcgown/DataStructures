@@ -57,7 +57,7 @@ public class Stack<T> {
 
     }
 
-    public T peak(){
+    public T peek(){
 
         if(isEmpty()){
             System.out.println("Stack is empty.");

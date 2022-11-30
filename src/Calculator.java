@@ -220,7 +220,7 @@ public class Calculator extends GraphicsProgram {
 
                     postMessage("Found closing parenthesis.");
 
-                    while (!op.isEmpty() && op.peak() != '(') {
+                    while (!op.isEmpty() && op.peek() != '(') {
                         ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
                     }
 
@@ -237,7 +237,7 @@ public class Calculator extends GraphicsProgram {
 
                     postMessage("Found operator.");
 
-                    while (!op.isEmpty() && precedence(op.peak(), ch)) {
+                    while (!op.isEmpty() && precedence(op.peek(), ch)) {
                         ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
                     }
 
@@ -254,12 +254,12 @@ public class Calculator extends GraphicsProgram {
 
         while (!op.isEmpty()) {
 
-            postMessage("You are operating with a " + op.peak() + " operator.");
+            postMessage("You are operating with a " + op.peek() + " operator.");
 
             ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
         }
 
-        postMessage("Evaluation complete. Your answer is:  " + ns.peak());
+        postMessage("Evaluation complete. Your answer is:  " + ns.peek());
         return ns.pop();
 
         //basically, if there are still numbers on the op stack, keep calculating
