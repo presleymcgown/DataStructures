@@ -88,26 +88,44 @@ public class Calculator extends GraphicsProgram {
 
     }
 
-    private int calculate(char op, int a, int b) {
+    private int calculate(char op, int a, int b){
 
-        if (op == '*') {
-            return a * b;
+        if(op == '*'){
+
+            postMessage("You are operating with *");
+
+            return a*b;
         }
 
-        if (op == '/') {
-            return a / b;
+        if(op == '/'){
+
+            postMessage("You are operating with /");
+
+            int ans = a / b;
+
+            postMessage(a + "");
+            postMessage(b + "");
+
+            postMessage("" + ans);
+
+            return b/a;
         }
 
-        if (op == '+') {
-            return a + b;
+        if(op == '+'){
+
+            postMessage("You are operating with +");
+
+            return a+b;
         }
 
-        if (op == '-') {
-            return a - b;
+        if(op == '-'){
+
+            postMessage("You are operating with -");
+
+            return a-b;
         }
 
         return 0;
-
     }
 
     private boolean precedence(char peek, char ch) {
@@ -200,42 +218,32 @@ public class Calculator extends GraphicsProgram {
                     i++;
                 } else if (ch == ')') {
 
-                    postMessage("Found closing parenthesis. Beginning parenthesis set evaluation...");
+                    postMessage("Found closing parenthesis.");
 
                     while (!op.isEmpty() && op.peak() != '(') {
                         ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
                     }
 
-                    postMessage("Removing parenthesis from op stack.");
-
                     op.pop();
+
+                    i++;
 
                     // you have found a closing paren.
                     // go ahead and calculate everything on the op stack until you find the opening paren
                     // remove the opening paren
 
                 } else if (ch == '*' || ch == '/' || ch == '+' || ch == '-') {
-                    //this is where you have found an operator. react accordingly
-                        /*
-                        determine if it has a higher precedence
-                        that the operator that is currently
-                        on top of the op stack. When we find
-                        an op that had precedence ( '*' or '/' vs '+' or '-')
-                        we should calculate the result of the
-                        current operator immediately, and push
-                        the result onto the number stack.
-                         */
 
-                    postMessage("Operator found.");
+
+                    postMessage("Found operator.");
 
                     while (!op.isEmpty() && precedence(op.peak(), ch)) {
-
-
                         ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
                     }
 
-
                     op.push(ch);
+
+                    i++;
 
                 }
             }
@@ -245,34 +253,29 @@ public class Calculator extends GraphicsProgram {
         // it is possible that the op stack will still have contents which must  be evaluated until stacks are empty
 
         while (!op.isEmpty()) {
-            postMessage("Op stack not empty. Evaluating...");
+
+            postMessage("You are operating with a " + op.peak() + " operator.");
+
             ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
         }
 
         postMessage("Evaluation complete. Your answer is:  " + ns.peak());
-        postMessage("");
         return ns.pop();
 
         //basically, if there are still numbers on the op stack, keep calculating
 
         //returned  whatever is left on the number stack
-        return ns.pop();
-
-    }else
-
-    {
-
-        return 0;
 
     }
 
-}
+
         
 
     private void postMessage(String s, int time){
 
         System.out.println(s);
         pause(time);
+
     }
 
     private void postMessage(String s){
