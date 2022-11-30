@@ -16,11 +16,11 @@ public class Calculator extends GraphicsProgram {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new acm.gui.TableLayout(5, 4));
 
-        String[] labels = { "1", "2", "3", "+",
+        String[] labels = {"1", "2", "3", "+",
                 "4", "5", "6", "-",
                 "7", "8", "9", "*",
                 "(", "0", ")", "/",
-                "C", "<", "=", "." };
+                "C", "<", "=", "."};
 
         for (int i = 0; i < 20; i++) {
             JButton button = new JButton(labels[i]);
@@ -41,13 +41,12 @@ public class Calculator extends GraphicsProgram {
         add(display, 0, 18);
 
 
-
     }
 
     @Override
-    public void actionPerformed(ActionEvent ae){
+    public void actionPerformed(ActionEvent ae) {
 
-        switch(ae.getActionCommand()){
+        switch (ae.getActionCommand()) {
 
             case "=": //case an evaluation
 
@@ -71,7 +70,7 @@ public class Calculator extends GraphicsProgram {
 
             case "<": // delete a single character from the display IF a character exists to be deleted
 
-                if(display.getLabel().length()>0){
+                if (display.getLabel().length() > 0) {
 
                     StringBuilder sb = new StringBuilder(display.getLabel());
                     sb = sb.deleteCharAt(display.getLabel().length() - 1);
@@ -89,35 +88,35 @@ public class Calculator extends GraphicsProgram {
 
     }
 
-    private int calculate(char op, int a, int b){
+    private int calculate(char op, int a, int b) {
 
-        if(op == '*'){
-            return a*b;
+        if (op == '*') {
+            return a * b;
         }
 
-        if(op == '/'){
-            return a/b;
+        if (op == '/') {
+            return a / b;
         }
 
-        if(op == '+'){
-            return a+b;
+        if (op == '+') {
+            return a + b;
         }
 
-        if(op == '-'){
-            return a-b;
+        if (op == '-') {
+            return a - b;
         }
 
         return 0;
 
     }
 
-    private boolean precedence(char peek, char ch){
-        if((peek == '*' || peek == '/') && (ch == '+' || ch == '-')){
+    private boolean precedence(char peek, char ch) {
+        if ((peek == '*' || peek == '/') && (ch == '+' || ch == '-')) {
             return true;
         }
 
         // forces left to right operation
-        if(peek != ch && peek != '('){
+        if (peek != ch && peek != '(') {
             return true;
         }
 
@@ -126,7 +125,7 @@ public class Calculator extends GraphicsProgram {
 
     }
 
-    private int evaluate(String input){
+    private int evaluate(String input) {
 
         int strlen = input.length();
 
@@ -138,21 +137,21 @@ public class Calculator extends GraphicsProgram {
 
         StringBuffer s;
 
-        if(!input.isEmpty()){
+        if (!input.isEmpty()) {
 
             postMessage("Beginning evaluation...", 100);
 
             // loop across input string
-                while(i < strlen) {
-                    // store the character found at a given point (i)
-                    ch = input.charAt(i);
-                    // skip over blank spaces (this shouldn't happen)
-                    if(ch == ' '){
-                        i++;
-                        continue;
-                    }
+            while (i < strlen) {
+                // store the character found at a given point (i)
+                ch = input.charAt(i);
+                // skip over blank spaces (this shouldn't happen)
+                if (ch == ' ') {
+                    i++;
+                    continue;
+                }
 
-                    postMessage("Searching for symbols...");
+                postMessage("Searching for symbols...");
                 /*
                     1) Check for numbers. Question to ask yourself: how do I handle multi-digit numbers?
                        ch <= '9' && ch >= '0' . A char can be converted to an int using Integer.parseInt(new String(s))
@@ -171,41 +170,52 @@ public class Calculator extends GraphicsProgram {
                     5) As the primary loop reaches the end of an iteration, don't forget to increment.
                 */
 
-                    if(ch <= '9' && ch >= '0'){
+                if (ch <= '9' && ch >= '0') {
 
-                        postMessage("Found number.");
-                        s = new StringBuffer();
-                        s.append(ch);
+                    postMessage("Found number.");
+                    s = new StringBuffer();
+                    s.append(ch);
+                    i++;
+
+                    while (i < strlen && (input.charAt(i)) <= '9' && input.charAt(i) >= '0') {
+
+                        s.append(input.charAt(i));
                         i++;
 
-                        while(i < strlen && (input.charAt(i)) <= '9' && input.charAt(i) >= '0'){
+                    }
 
-                            s.append(input.charAt(i));
-                            i++;
+                    ns.push(Integer.parseInt(new String(s)));
+                    continue;
 
-                        }
+                    // you have found a number
+                    // what if the number had multiple digits though?
+                    // push the complete number onto the number stack. To do so:
+                    // ns.push(Integer.parseInt(new String(s)));
 
-                        ns.push(Integer.parseInt(new String(s)));
-                        continue;
+                } else if (ch == '(') {
+                    //you have found an opening paren
+                    // don't do anything yet, just add it to the op stack
+                    postMessage("Found opening parenthesis.");
+                    op.push(ch);
+                    i++;
+                } else if (ch == ')') {
 
-                        // you have found a number
-                        // what if the number had multiple digits though?
-                        // push the complete number onto the number stack. To do so:
-                        // ns.push(Integer.parseInt(new String(s)));
+                    postMessage("Found closing parenthesis. Beginning parenthesis set evaluation...");
 
-                    }else if(ch == '('){
-                        //you have found an opening paren
-                        // don't do anything yet, just add it to the op stack
-                        postMessage("Found opening parenthesis.");
-                        op.push(ch);
-                        i++;
-                    }else if(ch == ')'){
-                        // you have found a closing paren.
-                        // go ahead and calculate everything on the op stack until you find the opening paren
-                        // remove the opening paren
-                        i++;
-                    }else if(ch == '*' || ch == '/' || ch == '+' || ch == '-'){
-                        //this is where you have found an operator. react accordingly
+                    while (!op.isEmpty() && op.peak() != '(') {
+                        ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
+                    }
+
+                    postMessage("Removing parenthesis from op stack.");
+
+                    op.pop();
+
+                    // you have found a closing paren.
+                    // go ahead and calculate everything on the op stack until you find the opening paren
+                    // remove the opening paren
+
+                } else if (ch == '*' || ch == '/' || ch == '+' || ch == '-') {
+                    //this is where you have found an operator. react accordingly
                         /*
                         determine if it has a higher precedence
                         that the operator that is currently
@@ -216,35 +226,48 @@ public class Calculator extends GraphicsProgram {
                         the result onto the number stack.
                          */
 
-                        if(!op.isEmpty() && precedence(op.peak(), ch)){
+                    postMessage("Operator found.");
 
-                            ns.push(calculate(ch, ns.pop(), input.charAt(++i)));
-                            i++;
+                    while (!op.isEmpty() && precedence(op.peak(), ch)) {
 
-                        }else{
-                            op.push(ch);
-                            i++;
-                        }
+
+                        ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
                     }
 
-                } //primary loops over
 
-            // it is possible that the op stack will still have contents which must  be evaluated until stacks are empty
+                    op.push(ch);
 
+                }
+            }
 
+        } //primary loops over
 
-            //basically, if there are still numbers on the op stack, keep calculating
+        // it is possible that the op stack will still have contents which must  be evaluated until stacks are empty
 
-            //returned  whatever is left on the number stack
-            return ns.pop();
-
-        }else {
-
-            return 0;
-
+        while (!op.isEmpty()) {
+            postMessage("Op stack not empty. Evaluating...");
+            ns.push(calculate(op.pop(), ns.pop(), ns.pop()));
         }
 
+        postMessage("Evaluation complete. Your answer is:  " + ns.peak());
+        postMessage("");
+        return ns.pop();
+
+        //basically, if there are still numbers on the op stack, keep calculating
+
+        //returned  whatever is left on the number stack
+        return ns.pop();
+
+    }else
+
+    {
+
+        return 0;
+
     }
+
+}
+        
 
     private void postMessage(String s, int time){
 
